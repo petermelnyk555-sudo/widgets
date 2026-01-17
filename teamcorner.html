@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Team Corner</title>
+    <style>
+        :root {
+            --cream: #fffaf0;
+            --dusty-rose: #f9d5d3;
+            --sage: #e0e9e1;
+            --mocha: #9c847a;
+            --text: #5b4d47;
+            --glass: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* The Breathing Background */
+        .aura-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, #fdfcfb 0%, #e2d1c3 100%);
+            z-index: -1;
+        }
+
+        .aura-circle {
+            position: absolute;
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: breathe 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.2) translate(10px, 20px); }
+        }
+
+        /* Widget Card */
+        .cozy-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            width: 90%;
+            max-width: 420px;
+            padding: 48px 32px;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+            text-align: center;
+            color: var(--text);
+        }
+
+        .greeting-time {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+
+        .welcome-msg {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 32px;
+        }
+
+        /* Intention Block */
+        .intention-block {
+            font-size: 1.1rem;
+            font-style: italic;
+            line-height: 1.6;
+            padding: 0 10px;
+            position: relative;
+        }
+
+        .intention-block span {
+            display: block;
+            margin-top: 15px;
+            font-size: 0.75rem;
+            font-style: normal;
+            font-weight: 700;
+            opacity: 0.5;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aura-bg">
+        <div class="aura-circle" style="width: 400px; height: 400px; background: var(--dusty-rose); top: -100px; left: -100px;"></div>
+        <div class="aura-circle" style="width: 300px; height: 300px; background: var(--sage); bottom: -50px; right: -50px; animation-delay: -2s;"></div>
+    </div>
+
+    <div class="cozy-card">
+        <div class="greeting-time" id="time-display">00:00 • Morning</div>
+        <h1 class="welcome-msg" id="greeting">Hello, team.</h1>
+
+        <div class="intention-block">
+            "Focus on the process, not just the outcome. We're doing great work together."
+            <span>— WEEKLY INTENTION</span>
+        </div>
+    </div>
+
+    <script>
+        function updateGreeting() {
+            const now = new Date();
+            const hours = now.getHours();
+            const mins = String(now.getMinutes()).padStart(2, '0');
+            const timeStr = `${hours}:${mins}`;
+            
+            let greet = "Hello, team.";
+            let sub = "Morning";
+
+            if (hours < 12) {
+                greet = "Good morning.";
+                sub = "Morning";
+            } else if (hours < 18) {
+                greet = "Good afternoon.";
+                sub = "Afternoon";
+            } else {
+                greet = "Good evening.";
+                sub = "Evening";
+            }
+
+            document.getElementById('greeting').textContent = greet;
+            document.getElementById('time-display').textContent = `${timeStr} • ${sub}`;
+        }
+
+        updateGreeting();
+        setInterval(updateGreeting, 60000);
+    </script>
+</body>
+</html>
