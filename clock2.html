@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Pastel Clock</title>
+    <style>
+        :root {
+            --bg-color: transparent;
+            --widget-bg: #ffffff;
+            --text-main: #5d5d5d;
+            --text-muted: #a0a0a0;
+            --accent-soft: #e3f2fd; /* Soft Pastel Blue */
+            --accent-primary: #bbdefb; /* Richer Pastel Blue */
+            --border-color: #f1f1f1;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --radius: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .widget-container {
+            background: var(--widget-bg);
+            width: 100%;
+            max-width: 300px;
+            padding: 30px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .time {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .date {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            background: var(--accent-soft);
+            color: #5c92be;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .separator {
+            width: 4px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 50%;
+        }
+
+        .day-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="widget-container">
+        <div class="time" id="clock">00:00</div>
+        <div class="date" id="full-date">January 1, 2024</div>
+        
+        <div class="meta-info">
+            <div class="day-name" id="day-name">Monday</div>
+            <div class="separator"></div>
+            <div class="badge" id="week-number">Week 01</div>
+        </div>
+    </div>
+
+    <script>
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            return weekNo;
+        }
+
+        function updateWidget() {
+            const now = new Date();
+            
+            // Time
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+
+            // Date
+            const options = { month: 'long', day: 'numeric', year: 'numeric' };
+            document.getElementById('full-date').textContent = now.toLocaleDateString('en-US', options);
+
+            // Day Name
+            const dayOptions = { weekday: 'long' };
+            document.getElementById('day-name').textContent = now.toLocaleDateString('en-US', dayOptions);
+
+            // Week Number
+            const weekNum = getWeekNumber(now);
+            document.getElementById('week-number').textContent = `Week ${String(weekNum).padStart(2, '0')}`;
+        }
+
+        // Run immediately and then every minute
+        updateWidget();
+        setInterval(updateWidget, 1000); // Updated every second for accuracy, though only showing minutes
+    </script>
+</body>
+</html>
